@@ -1,0 +1,21 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white/80 backdrop-blur-xl border border-white rounded-3xl shadow-xl p-8 sm:p-12 text-center border-t-4 border-indigo-500">
+    <div class="text-5xl mb-4">👋</div>
+    <h1 class="text-3xl font-extrabold text-slate-800 mb-4">Need Help?</h1>
+    <p class="text-slate-600 mb-8 max-w-md mx-auto">
+        If you are experiencing issues with the To-Do app, feel free to reach out. We are always looking to squash bugs and improve the UX!
+    </p>
+    
+    <a href="mailto:khanihtesham0332@gmail.com" class="inline-block font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-8 py-4 rounded-xl shadow-lg transition-transform hover:-translate-y-1">
+        📧 Email Support
+    </a>
+    
+    <div class="mt-12">
+        <a href="/" class="font-bold text-slate-500 hover:text-indigo-600 transition-colors">
+            ⬅️ Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

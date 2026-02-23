@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro To-Do List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --bg-color: #f8fafc; --orb-1: #c084fc; --orb-2: #818cf8; --orb-3: #f472b6;
+        }
+        body { background-color: var(--bg-color); transition: background-color 0.5s ease; }
+        .orb-1 { background-color: var(--orb-1); transition: background-color 0.5s ease; }
+        .orb-2 { background-color: var(--orb-2); transition: background-color 0.5s ease; }
+        .orb-3 { background-color: var(--orb-3); transition: background-color 0.5s ease; }
+
+        @keyframes float {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-float { animation: float 10s infinite ease-in-out; }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+    </style>
+</head>
+<body class="relative flex flex-col min-h-screen font-sans text-slate-800 selection:bg-indigo-200 selection:text-indigo-900 overflow-x-hidden">
+
+    <div id="custom-bg-layer" class="fixed inset-0 w-full h-full z-[-2] bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-0"></div>
+
+    <div class="fixed inset-0 w-full h-full z-[-1]" id="orb-container">
+        <div class="orb-1 absolute top-[-10%] left-[-10%] w-96 h-96 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-float"></div>
+        <div class="orb-2 absolute top-[20%] right-[-5%] w-96 h-96 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-float animation-delay-2000"></div>
+        <div class="orb-3 absolute bottom-[-10%] left-[20%] w-96 h-96 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-float animation-delay-4000"></div>
+    </div>
+
+    <header class="sticky top-0 z-50 bg-white/60 backdrop-blur-md border-b border-white/50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 cursor-pointer transform hover:scale-105 transition-transform">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <span class="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 to-purple-700 tracking-tight">TaskPro</span>
+            </a>
+            
+            <div class="flex items-center gap-4">
+                <button onclick="toggleThemeModal()" class="flex items-center gap-2 text-sm font-bold text-slate-600 bg-white/80 hover:bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200 transition-all hover:scale-105">
+                    🎨 Themes
+                </button>
+                <div class="w-9 h-9 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden cursor-pointer hover:ring-2 hover:ring-indigo-400 transition-all">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=e2e8f0" alt="Profile" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="theme-modal" class="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center transition-opacity opacity-0">
+        <div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300 border border-white" id="theme-modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-extrabold text-slate-800">Choose Theme 🎨</h2>
+                <button onclick="toggleThemeModal()" class="text-slate-400 hover:text-red-500 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <button onclick="setTheme('default')" class="h-24 rounded-xl shadow-inner bg-slate-50 border-2 border-slate-200 hover:border-indigo-500 overflow-hidden relative group">
+                    <div class="absolute inset-0 opacity-40 bg-gradient-to-br from-purple-400 via-indigo-400 to-pink-400 group-hover:opacity-60 transition-opacity"></div>
+                    <span class="relative z-10 font-bold text-slate-800 bg-white/80 px-2 py-1 rounded-md text-sm">Lavender Glass</span>
+                </button>
+                <button onclick="setTheme('ocean')" class="h-24 rounded-xl shadow-inner bg-cyan-50 border-2 border-slate-200 hover:border-cyan-500 overflow-hidden relative group">
+                    <div class="absolute inset-0 opacity-40 bg-gradient-to-br from-blue-400 via-teal-400 to-cyan-400 group-hover:opacity-60 transition-opacity"></div>
+                    <span class="relative z-10 font-bold text-slate-800 bg-white/80 px-2 py-1 rounded-md text-sm">Ocean Breeze</span>
+                </button>
+                <button onclick="setTheme('sunset')" class="h-24 rounded-xl shadow-inner bg-orange-50 border-2 border-slate-200 hover:border-orange-500 overflow-hidden relative group">
+                    <div class="absolute inset-0 opacity-40 bg-gradient-to-br from-orange-400 via-red-400 to-yellow-400 group-hover:opacity-60 transition-opacity"></div>
+                    <span class="relative z-10 font-bold text-slate-800 bg-white/80 px-2 py-1 rounded-md text-sm">Sunset Glow</span>
+                </button>
+                <button onclick="setTheme('forest')" class="h-24 rounded-xl shadow-inner bg-green-50 border-2 border-slate-200 hover:border-emerald-500 overflow-hidden relative group">
+                    <div class="absolute inset-0 opacity-40 bg-gradient-to-br from-green-400 via-emerald-400 to-teal-400 group-hover:opacity-60 transition-opacity"></div>
+                    <span class="relative z-10 font-bold text-slate-800 bg-white/80 px-2 py-1 rounded-md text-sm">Enchanted Forest</span>
+                </button>
+                <button onclick="setTheme('midnight')" class="h-24 rounded-xl shadow-inner bg-slate-900 border-2 border-slate-700 hover:border-purple-500 overflow-hidden relative group col-span-2">
+                    <div class="absolute inset-0 opacity-40 bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-800 group-hover:opacity-60 transition-opacity"></div>
+                    <span class="relative z-10 font-bold text-white bg-black/50 px-2 py-1 rounded-md text-sm">Midnight Dark</span>
+                </button>
+            </div>
+
+            <div class="border-t border-slate-200 pt-6">
+                <label class="block text-sm font-bold text-slate-700 mb-2">Or Upload Custom Background 🖼️</label>
+                <input type="file" id="custom-image-upload" accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow py-8 px-4 sm:py-12 relative z-10">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="bg-white/40 backdrop-blur-md border-t border-white/50 mt-auto relative z-10">
+        <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-sm text-slate-600 font-medium">© 2026 TaskPro. Built with <span class="text-red-500">❤️</span> in Django.</p>
+            <div class="flex gap-5">
+                <a href="{% url 'privacy' %}" class="text-slate-500 hover:text-indigo-700 transition-colors font-medium text-sm">Privacy Policy</a>
+                <a href="{% url 'terms' %}" class="text-slate-500 hover:text-indigo-700 transition-colors font-medium text-sm">Terms of Service</a>
+                <a href="{% url 'support' %}" class="text-slate-500 hover:text-indigo-700 transition-colors font-medium text-sm">Support</a>
+            </div>
+        </div>
+    </footer>
+<script>
+        const themes = {
+            'default': { bg: '#f8fafc', o1: '#c084fc', o2: '#818cf8', o3: '#f472b6' },
+            'ocean': { bg: '#ecfeff', o1: '#38bdf8', o2: '#2dd4bf', o3: '#22d3ee' },
+            'sunset': { bg: '#fff7ed', o1: '#fb923c', o2: '#f87171', o3: '#facc15' },
+            'forest': { bg: '#f0fdf4', o1: '#4ade80', o2: '#34d399', o3: '#2dd4bf' },
+            'midnight': { bg: '#0f172a', o1: '#312e81', o2: '#4c1d95', o3: '#1e293b' }
+        };
+        const modal = document.getElementById('theme-modal');
+        const modalContent = document.getElementById('theme-modal-content');
+        const bgLayer = document.getElementById('custom-bg-layer');
+        const orbContainer = document.getElementById('orb-container');
+
+        function toggleThemeModal() {
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
+            } else {
+                modal.classList.add('opacity-0'); modalContent.classList.add('scale-95');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
+            }
+        }
+
+        function setTheme(themeName) {
+            const t = themes[themeName];
+            document.documentElement.style.setProperty('--bg-color', t.bg);
+            document.documentElement.style.setProperty('--orb-1', t.o1);
+            document.documentElement.style.setProperty('--orb-2', t.o2);
+            document.documentElement.style.setProperty('--orb-3', t.o3);
+            
+            bgLayer.style.backgroundImage = ''; 
+            bgLayer.classList.remove('opacity-100'); 
+            bgLayer.classList.add('opacity-0');
+            orbContainer.style.display = 'block';
+            
+            localStorage.setItem('taskpro-theme', themeName); 
+            localStorage.removeItem('taskpro-custom-img');
+            
+            // BUG FIX: Only close the modal if it is currently open!
+            if (!modal.classList.contains('hidden')) {
+                toggleThemeModal();
+            }
+        }
+
+        document.getElementById('custom-image-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imgData = event.target.result;
+                    bgLayer.style.backgroundImage = `url(${imgData})`; 
+                    bgLayer.classList.remove('opacity-0'); 
+                    bgLayer.classList.add('opacity-100');
+                    orbContainer.style.display = 'none';
+                    
+                    localStorage.setItem('taskpro-custom-img', imgData); 
+                    localStorage.setItem('taskpro-theme', 'custom');
+                    
+                    // BUG FIX: Only close the modal if it is currently open!
+                    if (!modal.classList.contains('hidden')) {
+                        toggleThemeModal();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Load saved theme silently on page load
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('taskpro-theme');
+            const savedImage = localStorage.getItem('taskpro-custom-img');
+            if (savedTheme === 'custom' && savedImage) {
+                bgLayer.style.backgroundImage = `url(${savedImage})`; 
+                bgLayer.classList.remove('opacity-0'); 
+                bgLayer.classList.add('opacity-100');
+                orbContainer.style.display = 'none';
+            } else if (savedTheme && themes[savedTheme]) {
+                const t = themes[savedTheme];
+                document.documentElement.style.setProperty('--bg-color', t.bg); 
+                document.documentElement.style.setProperty('--orb-1', t.o1);
+                document.documentElement.style.setProperty('--orb-2', t.o2); 
+                document.documentElement.style.setProperty('--orb-3', t.o3);
+            }
+        };
+    </script>
+</body>
+</html>
