@@ -10,4 +10,5 @@ urlpatterns = [
     path('privacy/', views.privacyPolicy, name='privacy'),
     path('terms/', views.termsOfService, name='terms'), # <-- New!
     path('support/', views.support, name='support'),    # <-- New!
+    path('logout/', views.logoutUser, name='logout'),
 ]

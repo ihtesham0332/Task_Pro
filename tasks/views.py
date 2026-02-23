@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
-from django.utils import timezone # NEW: Gives us the exact current time
+from django.utils import timezone
 from .models import Task
 from .forms import TaskForm
+from django.contrib.auth import logout
+# A quick helper function to grab the pending count for the header
+def get_global_context():
+    return {
+        'pending_count': Task.objects.filter(completed=False).count()
+    }
 
-# --- FUNCTION 1: The Homepage (List & Add) ---
 def index(request):
-    # NEW: Split tasks into two different lists!
     pending_tasks = Task.objects.filter(completed=False).order_by('-created_at')
     completed_tasks = Task.objects.filter(completed=True).order_by('-completed_at')
-    
     form = TaskForm()
 
     if request.method == 'POST':
@@ -17,12 +20,10 @@ def index(request):
             form.save()
             return redirect('/')
 
-    # Send both lists to the HTML
     context = {'pending_tasks': pending_tasks, 'completed_tasks': completed_tasks, 'form': form}
+    context.update(get_global_context()) # Add the bell count!
     return render(request, 'tasks/list.html', context)
 
-
-# --- FUNCTION 2: The Edit Page (Update & Timestamp Logic) ---
 def updateTask(request, pk):
     task = Task.objects.get(id=pk)
     form = TaskForm(instance=task)
@@ -30,35 +31,23 @@ def updateTask(request, pk):
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
-            # NEW: Pause before saving to check the checkbox status
-            task_instance = form.save(commit=False) 
-            
-            # If checked as done, and doesn't have a time yet, stamp it!
-            if task_instance.completed and task_instance.completed_at is None:
-                task_instance.completed_at = timezone.now()
-            # If user un-checks the box, remove the completed time
-            elif not task_instance.completed:
-                task_instance.completed_at = None
-                
-            task_instance.save() # Now save to database
+            form.save()
             return redirect('/')
 
     context = {'form': form}
+    context.update(get_global_context())
     return render(request, 'tasks/update_task.html', context)
 
-
-# --- FUNCTION 3: The Delete Page ---
 def deleteTask(request, pk):
     item = Task.objects.get(id=pk)
-
     if request.method == 'POST':
         item.delete()
         return redirect('/')
 
     context = {'item': item}
+    context.update(get_global_context())
     return render(request, 'tasks/delete_task.html', context)
 
-# --- FUNCTION 4: Quick Complete ---
 def completeTask(request, pk):
     task = Task.objects.get(id=pk)
     task.completed = True
@@ -66,22 +55,27 @@ def completeTask(request, pk):
     task.save()
     return redirect('/')
 
-
-# --- FUNCTION 5: Undo Complete ---
 def undoTask(request, pk):
     task = Task.objects.get(id=pk)
     task.completed = False
-    task.completed_at = None # Erase the timestamp!
+    task.completed_at = None
     task.save()
     return redirect('/')
 
-
-# --- FUNCTION 6: Static Pages ---
+# --- Static Pages ---
 def privacyPolicy(request):
-    return render(request, 'tasks/privacy.html')
+    context = get_global_context()
+    return render(request, 'tasks/privacy.html', context)
 
 def termsOfService(request):
-    return render(request, 'tasks/terms.html')
+    context = get_global_context()
+    return render(request, 'tasks/terms.html', context)
 
 def support(request):
-    return render(request, 'tasks/support.html')
+    context = get_global_context()
+    return render(request, 'tasks/support.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('/') # Or redirect to a login page if you have one

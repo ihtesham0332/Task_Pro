@@ -6,7 +6,7 @@
     <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-8 text-center relative overflow-hidden shadow-inner">
         <div class="absolute top-0 left-0 w-full h-full bg-white opacity-10 pattern-dots"></div>
         <h2 class="text-3xl font-extrabold text-white mb-2 relative z-10 tracking-tight">My Tasks</h2>
-        <p class="text-indigo-100 text-sm font-medium relative z-10">Stay organized, stay productive 🚀</p>
+        <p class="text-indigo-100 text-sm font-medium relative z-10">Stay organized, stay productive </p>
     </div>
 
     <div class="p-6 sm:p-8 border-b border-slate-100/50 bg-white/50">
@@ -27,13 +27,13 @@
         </h3>
         
         {% for task in pending_tasks %}
-            <div class="flex items-center justify-between p-4 bg-white/80 backdrop-blur-sm border border-white rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all group">
+            <div class="task-item flex items-center justify-between p-4 bg-white/80 backdrop-blur-sm border border-white rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all group">
                 <div class="flex items-center gap-4 overflow-hidden flex-1">
                     <a href="{% url 'complete_task' task.id %}" class="w-6 h-6 rounded-full border-2 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50 flex items-center justify-center transition-all group/check shrink-0">
                         <svg class="w-3.5 h-3.5 text-emerald-500 opacity-0 group-hover/check:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                     </a>
                     <div class="flex-1 truncate pr-2">
-                        <p class="text-slate-700 font-bold text-[17px] leading-tight truncate group-hover:text-indigo-600 transition-colors">{{ task.title }}</p>
+                        <p class="task-title text-slate-700 font-bold text-[17px] leading-tight truncate group-hover:text-indigo-600 transition-colors">{{ task.title }}</p>
                     </div>
                 </div>
                 <div class="flex gap-2 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
@@ -43,7 +43,7 @@
             </div>
         {% empty %}
             <div class="text-center py-6 px-4 border-2 border-dashed border-slate-300 rounded-2xl bg-white/40">
-                <p class="text-slate-500 text-sm font-medium">No pending tasks right now! 🎉</p>
+                <p class="text-slate-500 text-sm font-medium">No pending tasks right now! </p>
             </div>
         {% endfor %}
     </div>
@@ -54,13 +54,13 @@
         </h3>
         <div class="space-y-3">
         {% for task in completed_tasks %}
-            <div class="flex items-center justify-between p-3 bg-white/50 border border-white rounded-xl group shadow-sm">
+            <div class="task-item flex items-center justify-between p-3 bg-white/50 border border-white rounded-xl group shadow-sm">
                 <div class="flex items-center gap-3 overflow-hidden flex-1">
                     <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
                         <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                     </div>
                     <div class="truncate pr-2">
-                        <p class="text-slate-500 line-through font-semibold text-sm truncate">{{ task.title }}</p>
+                        <p class="task-title text-slate-500 line-through font-semibold text-sm truncate">{{ task.title }}</p>
                     </div>
                 </div>
                 <div class="flex gap-1 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
