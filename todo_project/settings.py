@@ -25,9 +25,11 @@ SECRET_KEY = "django-insecure-=ob5++5d=xr84)fsaqj$2wexu_)b*mp56s&#$x1un^n4q_$c7$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Allow all hosts so Hugging Face can display the app
+ALLOWED_HOSTS = ['*']
 
-
+# Required for the styles (Tailwind CDN) to work through the HF frame
+CSRF_TRUSTED_ORIGINS = ['https://*.hf.space']
 # Application definition
 
 INSTALLED_APPS = [
